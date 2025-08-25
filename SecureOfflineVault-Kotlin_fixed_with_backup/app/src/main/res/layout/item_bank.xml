@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    app:strokeColor="@android:color/darker_gray"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Account No -->
+        <TextView
+            android:id="@+id/tvAccountNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account No"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Bank Name -->
+        <TextView
+            android:id="@+id/tvBankName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bank Name"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- IFSC -->
+        <TextView
+            android:id="@+id/tvIFSC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IFSC Code"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- CIF -->
+        <TextView
+            android:id="@+id/tvCIF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CIF No"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- Privy -->
+        <TextView
+            android:id="@+id/tvPrivy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privy"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="12dp">
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
