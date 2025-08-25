@@ -21,6 +21,13 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun policyDao(): PolicyDao
     abstract fun aadharDao(): AadharDao
 
+    suspend fun clearAllTables() {
+        bankDao().getAll().forEach { bankDao().delete(it) }
+        cardDao().getAll().forEach { cardDao().delete(it) }
+        policyDao().getAll().forEach { policyDao().delete(it) }
+        aadharDao().getAll().forEach { aadharDao().delete(it) }
+    }
+
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
 

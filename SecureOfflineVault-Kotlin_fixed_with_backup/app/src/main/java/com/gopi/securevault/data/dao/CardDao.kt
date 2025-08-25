@@ -9,6 +9,9 @@ interface CardDao {
     @Query("SELECT * FROM cards ORDER BY id DESC")
     fun observeAll(): Flow<List<CardEntity>>
 
+    @Query("SELECT * FROM cards")
+    suspend fun getAll(): List<CardEntity>
+
     @Insert
     suspend fun insert(entity: CardEntity)
 

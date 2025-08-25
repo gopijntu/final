@@ -18,4 +18,12 @@ object PasswordUtils {
         val hashed = md.digest(input.toByteArray(Charsets.UTF_8))
         return Base64.encodeToString(hashed, Base64.NO_WRAP)
     }
+
+    fun isPasswordValid(password: String): Boolean {
+        if (password.length < 8) return false
+        val hasLetter = password.any { it.isLetter() }
+        val hasDigit = password.any { it.isDigit() }
+        val hasSpecial = password.any { !it.isLetterOrDigit() }
+        return hasLetter && hasDigit && hasSpecial
+    }
 }

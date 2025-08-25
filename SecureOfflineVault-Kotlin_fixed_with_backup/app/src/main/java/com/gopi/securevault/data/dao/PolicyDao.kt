@@ -9,6 +9,9 @@ interface PolicyDao {
     @Query("SELECT * FROM policies ORDER BY id DESC")
     fun observeAll(): Flow<List<PolicyEntity>>
 
+    @Query("SELECT * FROM policies")
+    suspend fun getAll(): List<PolicyEntity>
+
     @Insert
     suspend fun insert(entity: PolicyEntity)
 

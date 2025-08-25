@@ -9,6 +9,9 @@ interface BankDao {
     @Query("SELECT * FROM banks ORDER BY id DESC")
     fun observeAll(): Flow<List<BankEntity>>
 
+    @Query("SELECT * FROM banks")
+    suspend fun getAll(): List<BankEntity>
+
     @Insert
     suspend fun insert(entity: BankEntity)
 

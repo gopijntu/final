@@ -16,12 +16,16 @@ import com.gopi.securevault.databinding.ItemCardBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+import android.content.ClipData
+import android.content.ClipboardManager
+
 class CardsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCardsBinding
     private val dao by lazy { AppDatabase.get(this).cardDao() }
     private val adapter = CardAdapter(
         onEdit = { entity -> showCreateOrEditDialog(entity) },
-        onDelete = { entity -> lifecycleScope.launch { dao.delete(entity) } }
+        onDelete = { entity -> lifecycleScope.launch { dao.delete(entity) } },
+        onCopy = { cardNumber -> copyToClipboard(cardNumber) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,11 +90,19 @@ class CardsActivity : AppCompatActivity() {
         }
         dlg.show()
     }
+
+    private fun copyToClipboard(text: String) {
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("card number", text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
 }
 
 class CardAdapter(
     val onEdit: (CardEntity) -> Unit,
-    val onDelete: (CardEntity) -> Unit
+    val onDelete: (CardEntity) -> Unit,
+    val onCopy: (String) -> Unit
 ) : RecyclerView.Adapter<CardVH>() {
     private val items = mutableListOf<CardEntity>()
 
@@ -102,7 +114,7 @@ class CardAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardVH {
         val binding = ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CardVH(binding, onEdit, onDelete)
+        return CardVH(binding, onEdit, onDelete, onCopy)
     }
 
     override fun getItemCount() = items.size
@@ -114,13 +126,14 @@ class CardAdapter(
 class CardVH(
     private val binding: ItemCardBinding,
     val onEdit: (CardEntity) -> Unit,
-    val onDelete: (CardEntity) -> Unit
+    val onDelete: (CardEntity) -> Unit,
+    val onCopy: (String) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: CardEntity) {
         // Title and core fields
         binding.tvTitle.text = item.bankName ?: "(No Bank)"
-        binding.tvCardNumber.text = "Card No: ${item.cardNumber ?: ""}"
+        binding.tvCardNumber.text = item.cardNumber ?: ""
         binding.tvExpiry.text = "Expiry: ${item.validTill ?: ""}"
 
         // Mask CVV
@@ -133,6 +146,7 @@ class CardVH(
         binding.tvCardHolder.text = item.cardType ?: ""
 
         // Buttons
+        binding.llCardNumber.setOnClickListener { onCopy(item.cardNumber ?: "") }
         binding.btnEdit.setOnClickListener { onEdit(item) }
         binding.btnDelete.setOnClickListener { onDelete(item) }
     }

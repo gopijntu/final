@@ -24,16 +24,35 @@
             app:layout_constraintEnd_toStartOf="@+id/btnEdit"
             tools:text="Bank Name" />
 
-        <TextView
-            android:id="@+id/tvCardNumber"
+        <LinearLayout
+            android:id="@+id/llCardNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginTop="8dp"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            tools:text="Card No: XXXX XXXX XXXX 1234" />
+            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+            <TextView
+                android:id="@+id/tvCardNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Card No: XXXX XXXX XXXX 1234" />
+
+            <ImageView
+                android:id="@+id/ivCopyCard"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_copy"
+                app:tint="?attr/colorControlNormal" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvCardHolder"

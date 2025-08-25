@@ -16,12 +16,16 @@ import com.gopi.securevault.databinding.ItemAadharBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+import android.content.ClipData
+import android.content.ClipboardManager
+
 class AadharActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAadharBinding
     private val dao by lazy { AppDatabase.get(this).aadharDao() }
     private val adapter = AadharAdapter(
         onEdit = { entity -> showCreateOrEditDialog(entity) },
-        onDelete = { entity -> lifecycleScope.launch { dao.delete(entity) } }
+        onDelete = { entity -> lifecycleScope.launch { dao.delete(entity) } },
+        onCopy = { aadharNumber -> copyToClipboard(aadharNumber) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,36 +89,12 @@ class AadharActivity : AppCompatActivity() {
         }
         dlg.show()
     }
-}
 
-        val dlg = AlertDialog.Builder(this)
-            .setView(dlgView)
-            .setPositiveButton("Save", null)
-            .setNegativeButton("Cancel", null)
-            .create()
-
-        dlg.setOnShowListener {
-            val btn = dlg.getButton(AlertDialog.BUTTON_POSITIVE)
-            btn.setOnClickListener {
-                val number = etNumber.text.toString().trim()
-                if (number.isBlank()) {
-                    Toast.makeText(this, "Aadhar number is mandatory", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                val entity = AadharEntity(
-                    id = existing?.id ?: 0,
-                    name = etName.text.toString(),
-                    number = number,
-                    //dob = etDob.text.toString(),
-                    //address = etAddress.text.toString()
-                )
-                lifecycleScope.launch {
-                    if (existing == null) dao.insert(entity) else dao.update(entity)
-                }
-                dlg.dismiss()
-            }
-        }
-        dlg.show()
+    private fun copyToClipboard(text: String) {
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("aadhar number", text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -123,7 +103,8 @@ class AadharActivity : AppCompatActivity() {
  */
 class AadharAdapter(
     val onEdit: (AadharEntity) -> Unit,
-    val onDelete: (AadharEntity) -> Unit
+    val onDelete: (AadharEntity) -> Unit,
+    val onCopy: (String) -> Unit
 ) : RecyclerView.Adapter<AadharAdapter.AadharVH>() {
 
     private val items = mutableListOf<AadharEntity>()
@@ -136,7 +117,7 @@ class AadharAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AadharVH {
         val binding = ItemAadharBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AadharVH(binding, onEdit, onDelete)
+        return AadharVH(binding, onEdit, onDelete, onCopy)
     }
 
     override fun getItemCount() = items.size
@@ -148,15 +129,17 @@ class AadharAdapter(
     class AadharVH(
         private val binding: ItemAadharBinding,
         val onEdit: (AadharEntity) -> Unit,
-        val onDelete: (AadharEntity) -> Unit
+        val onDelete: (AadharEntity) -> Unit,
+        val onCopy: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: AadharEntity) {
             binding.tvTitle.text = item.name ?: "(No Name)"
-            binding.tvAadharNumber.text = "Aadhar: ${item.number ?: ""}"
+            binding.tvAadharNumber.text = item.number ?: ""
             //binding.tvDob.text = "DOB: ${item.dob ?: ""}"
            // binding.tvAddress.text = "Address: ${item.address ?: ""}"
 
+            binding.llAadharNumber.setOnClickListener { onCopy(item.number ?: "") }
             binding.btnEdit.setOnClickListener { onEdit(item) }
             binding.btnDelete.setOnClickListener { onDelete(item) }
         }

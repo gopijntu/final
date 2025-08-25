@@ -9,6 +9,9 @@ interface AadharDao {
     @Query("SELECT * FROM aadhar ORDER BY id DESC")
     fun observeAll(): Flow<List<AadharEntity>>
 
+    @Query("SELECT * FROM aadhar")
+    suspend fun getAll(): List<AadharEntity>
+
     @Insert
     suspend fun insert(entity: AadharEntity)
 

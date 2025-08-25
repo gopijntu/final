@@ -16,12 +16,16 @@ import com.gopi.securevault.databinding.ItemBankBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+import android.content.ClipData
+import android.content.ClipboardManager
+
 class BanksActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBanksBinding
     private val dao by lazy { AppDatabase.get(this).bankDao() }
     private val adapter = BankAdapter(
         onEdit = { entity -> showCreateOrEditDialog(entity) },
-        onDelete = { entity -> lifecycleScope.launch { dao.delete(entity) } }
+        onDelete = { entity -> lifecycleScope.launch { dao.delete(entity) } },
+        onCopy = { accountNumber -> copyToClipboard(accountNumber) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,11 +87,19 @@ class BanksActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
+
+    private fun copyToClipboard(text: String) {
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("account number", text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
 }
 
 private class BankAdapter(
     val onEdit: (BankEntity) -> Unit,
-    val onDelete: (BankEntity) -> Unit
+    val onDelete: (BankEntity) -> Unit,
+    val onCopy: (String) -> Unit
 ) : RecyclerView.Adapter<BankVH>() {
     private val items = mutableListOf<BankEntity>()
     fun submit(list: List<BankEntity>) {
@@ -95,7 +107,7 @@ private class BankAdapter(
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BankVH {
         val binding = ItemBankBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return BankVH(binding, onEdit, onDelete)
+        return BankVH(binding, onEdit, onDelete, onCopy)
     }
     override fun getItemCount() = items.size
     override fun onBindViewHolder(holder: BankVH, position: Int) = holder.bind(items[position])
@@ -104,18 +116,20 @@ private class BankAdapter(
 private class BankVH(
     private val binding: ItemBankBinding,
     val onEdit: (BankEntity) -> Unit,
-    val onDelete: (BankEntity) -> Unit
+    val onDelete: (BankEntity) -> Unit,
+    val onCopy: (String) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: BankEntity) {
-        binding.tvTitle.text = "Title: ${item.title ?: "(No Title)"}"
-        binding.tvAccountNo.text = "Account No: ${item.accountNo}"
+        binding.tvTitle.text = item.title ?: "(No Title)"
+        binding.tvAccountNo.text = item.accountNo
         binding.tvBankName.text = "Bank: ${item.bankName ?: ""}"
         binding.tvIFSC.text = "IFSC: ${item.ifsc ?: ""}"
         binding.tvCIF.text = "CIF: ${item.cifNo ?: ""}"
         binding.tvUsername.text = "Username: ${item.username ?: ""}"
         binding.tvPrivy.text = "Privy: ${item.privy ?: ""}"
 
+        binding.llAccountNo.setOnClickListener { onCopy(item.accountNo) }
         binding.btnEdit.setOnClickListener { onEdit(item) }
         binding.btnDelete.setOnClickListener { onDelete(item) }
     }

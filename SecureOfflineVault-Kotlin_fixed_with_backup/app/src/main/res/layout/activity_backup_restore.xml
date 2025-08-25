@@ -13,44 +13,30 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:title="Settings" />
+            app:title="Backup & Restore" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="32dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:gravity="center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBackupRestore"
-            android:text="Backup &amp; Restore"
+            android:id="@+id/btnBackup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="16dp"/>
+            android:paddingVertical="16dp"
+            android:text="Backup Now" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangePassword"
-            android:text="Change Master Password"
+            android:id="@+id/btnRestore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:paddingVertical="16dp"/>
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@+id/tvFooter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Designed &amp; Created by Gopinath Kumbha"
-            android:textAppearance="?attr/textAppearanceCaption"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="16dp"/>
+            android:paddingVertical="16dp"
+            android:text="Restore" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

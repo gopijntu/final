@@ -38,6 +38,9 @@ class PasswordResetActivity : AppCompatActivity() {
             return
         }
 
+        binding.tvQ1.text = prefs.getString("q1", "Question 1")
+        binding.tvQ2.text = prefs.getString("q2", "Question 2")
+
         binding.btnSubmit.setOnClickListener {
             val a1 = binding.etAnswer1.text.toString().trim()
             val a2 = binding.etAnswer2.text.toString().trim()
@@ -45,8 +48,13 @@ class PasswordResetActivity : AppCompatActivity() {
             val n2 = binding.etConfirmPassword.text.toString().trim()
 
             // Validate password fields
-            if (n1 != n2 || n1.length < 6) {
-                Toast.makeText(this, "Passwords do not match or too short", Toast.LENGTH_SHORT).show()
+            if (n1 != n2) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (!PasswordUtils.isPasswordValid(n1)) {
+                Toast.makeText(this, "Password must be at least 8 characters with letters, numbers, and symbols.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 

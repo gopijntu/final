@@ -28,8 +28,13 @@ class SetupActivity : AppCompatActivity() {
             val q2 = binding.etQ2.text.toString().trim()
             val a2 = binding.etA2.text.toString()
 
-            if (name.isEmpty() || pwd.length < 6 || q1.isEmpty() || a1.isEmpty() || q2.isEmpty() || a2.isEmpty()) {
-                Toast.makeText(this, "Fill all fields (password min 6 chars)", Toast.LENGTH_SHORT).show()
+            if (name.isEmpty() || q1.isEmpty() || a1.isEmpty() || q2.isEmpty() || a2.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (!PasswordUtils.isPasswordValid(pwd)) {
+                Toast.makeText(this, "Password must be at least 8 characters with letters, numbers, and symbols.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
