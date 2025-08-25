@@ -5,115 +5,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 25% from top of the screen -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gTop25"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
-
     <!-- Menu area -->
     <ScrollView
         android:id="@+id/menuScroll"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/gTop25"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tvFooter"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.45">
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="24dp"
+            android:padding="32dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnBanks"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="Banks"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:maxWidth="260dp"
-                android:paddingVertical="12dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/rounded_button_ripple"
-                app:backgroundTint="@null"
-                app:rippleColor="@android:color/white"/>
+                android:maxWidth="280dp"
+                android:paddingVertical="16dp"
+                android:layout_marginTop="8dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCards"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="Cards"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:maxWidth="260dp"
-                android:paddingVertical="12dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_button_ripple"
-                app:backgroundTint="@null"
-                app:rippleColor="@android:color/white"/>
+                android:maxWidth="280dp"
+                android:paddingVertical="16dp"
+                android:layout_marginTop="16dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPolicies"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="Policies"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:maxWidth="260dp"
-                android:paddingVertical="12dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_button_ripple"
-                app:backgroundTint="@null"
-                app:rippleColor="@android:color/white"/>
+                android:maxWidth="280dp"
+                android:paddingVertical="16dp"
+                android:layout_marginTop="16dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAadhar"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="Aadhar"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:maxWidth="260dp"
-                android:paddingVertical="12dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_button_ripple"
-                app:backgroundTint="@null"
-                app:rippleColor="@android:color/white"/>
+                android:maxWidth="280dp"
+                android:paddingVertical="16dp"
+                android:layout_marginTop="16dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSettings"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="Settings"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:maxWidth="260dp"
-                android:paddingVertical="12dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/rounded_button_ripple"
-                app:backgroundTint="@null"
-                app:rippleColor="@android:color/white"/>
+                android:maxWidth="280dp"
+                android:paddingVertical="16dp"
+                android:layout_marginTop="32dp"/>
 
             <!-- ✅ NEW Logout button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="Logout"
-                android:textColor="@android:color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:maxWidth="260dp"
-                android:paddingVertical="12dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/rounded_button_ripple"
-                app:backgroundTint="@null"
-                app:rippleColor="@android:color/white"/>
+                android:maxWidth="280dp"
+                android:paddingVertical="16dp"
+                android:layout_marginTop="32dp"/>
 
         </LinearLayout>
     </ScrollView>
@@ -125,10 +94,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Designed &amp; Created by Gopinath Kumbha"
-        android:textSize="12sp"
-        android:textColor="@android:color/darker_gray"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

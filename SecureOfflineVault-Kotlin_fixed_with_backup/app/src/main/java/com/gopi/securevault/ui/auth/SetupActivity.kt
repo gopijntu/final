@@ -17,6 +17,7 @@ class SetupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         prefs = CryptoPrefs(this)
 
         binding.btnSave.setOnClickListener {

@@ -30,6 +30,10 @@ class PoliciesActivity : AppCompatActivity() {
         binding = ActivityPoliciesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
         binding.recycler.layoutManager = LinearLayoutManager(this)
         binding.recycler.adapter = adapter
 
@@ -41,20 +45,16 @@ class PoliciesActivity : AppCompatActivity() {
     }
 
     private fun showCreateOrEditDialog(existing: PolicyEntity?) {
-        val dlgView = layoutInflater.inflate(com.gopi.securevault.R.layout.dialog_policy, null)
-
-        val etName = dlgView.findViewById<EditText>(com.gopi.securevault.R.id.etName)
-        val etAccount = dlgView.findViewById<EditText>(com.gopi.securevault.R.id.etAccount)
-        val etCompany = dlgView.findViewById<EditText>(com.gopi.securevault.R.id.etCompany)
+        val dlgBinding = com.gopi.securevault.databinding.DialogPolicyBinding.inflate(layoutInflater)
 
         existing?.let {
-            etName.setText(it.name ?: "")
-            etAccount.setText(it.amount ?: "")
-            etCompany.setText(it.company ?: "")
+            dlgBinding.etName.setText(it.name ?: "")
+            dlgBinding.etAccount.setText(it.amount ?: "")
+            dlgBinding.etCompany.setText(it.company ?: "")
         }
 
         val dlg = AlertDialog.Builder(this)
-            .setView(dlgView)
+            .setView(dlgBinding.root)
             .setPositiveButton("Save", null)
             .setNegativeButton("Cancel", null)
             .create()
@@ -62,7 +62,7 @@ class PoliciesActivity : AppCompatActivity() {
         dlg.setOnShowListener {
             val btn = dlg.getButton(AlertDialog.BUTTON_POSITIVE)
             btn.setOnClickListener {
-                val name = etName.text.toString().trim()
+                val name = dlgBinding.etName.text.toString().trim()
                 if (name.isBlank()) {
                     Toast.makeText(this, "Name is mandatory", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
@@ -70,8 +70,8 @@ class PoliciesActivity : AppCompatActivity() {
                 val entity = PolicyEntity(
                     id = existing?.id ?: 0,
                     name = name,
-                    amount = etAccount.text.toString(),
-                    company = etCompany.text.toString()
+                    amount = dlgBinding.etAccount.text.toString(),
+                    company = dlgBinding.etCompany.text.toString()
                 )
                 lifecycleScope.launch {
                     if (existing == null) dao.insert(entity) else dao.update(entity)

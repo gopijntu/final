@@ -29,6 +29,10 @@ class CardsActivity : AppCompatActivity() {
         binding = ActivityCardsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
         binding.recycler.layoutManager = LinearLayoutManager(this)
         binding.recycler.adapter = adapter
 
@@ -40,25 +44,19 @@ class CardsActivity : AppCompatActivity() {
     }
 
     private fun showCreateOrEditDialog(existing: CardEntity?) {
-        val dlgView = layoutInflater.inflate(com.gopi.securevault.R.layout.dialog_card, null)
-        val etBank = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etBankName)
-        val etNumber = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etCardNumber)
-        val etType = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etCardType)
-        val etValid = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etValidTill)
-        val etCvv = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etCVV)
-        val etNote = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etNote)
+        val dlgBinding = com.gopi.securevault.databinding.DialogCardBinding.inflate(layoutInflater)
 
         existing?.let {
-            etBank.setText(it.bankName ?: "")
-            etNumber.setText(it.cardNumber ?: "")
-            etType.setText(it.cardType ?: "")
-            etValid.setText(it.validTill ?: "")
-            etCvv.setText(it.cvv ?: "")
-            etNote.setText(it.note ?: "")
+            dlgBinding.etBankName.editText?.setText(it.bankName ?: "")
+            dlgBinding.etCardNumber.editText?.setText(it.cardNumber ?: "")
+            dlgBinding.etCardType.editText?.setText(it.cardType ?: "")
+            dlgBinding.etValidTill.editText?.setText(it.validTill ?: "")
+            dlgBinding.etCVV.editText?.setText(it.cvv ?: "")
+            dlgBinding.etNote.editText?.setText(it.note ?: "")
         }
 
         val dlg = AlertDialog.Builder(this)
-            .setView(dlgView)
+            .setView(dlgBinding.root)
             .setPositiveButton("Save", null)
             .setNegativeButton("Cancel", null)
             .create()
@@ -66,19 +64,19 @@ class CardsActivity : AppCompatActivity() {
         dlg.setOnShowListener {
             val btn = dlg.getButton(AlertDialog.BUTTON_POSITIVE)
             btn.setOnClickListener {
-                val number = etNumber.text.toString().trim()
+                val number = dlgBinding.etCardNumber.editText?.text.toString().trim()
                 if (number.isBlank()) {
                     Toast.makeText(this, "Card number is mandatory", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 val entity = CardEntity(
                     id = existing?.id ?: 0,
-                    bankName = etBank.text.toString(),
-                    cardType = etType.text.toString(),
+                    bankName = dlgBinding.etBankName.editText?.text.toString(),
+                    cardType = dlgBinding.etCardType.editText?.text.toString(),
                     cardNumber = number,
-                    cvv = etCvv.text.toString(),
-                    validTill = etValid.text.toString(),
-                    note = etNote.text.toString()
+                    cvv = dlgBinding.etCVV.editText?.text.toString(),
+                    validTill = dlgBinding.etValidTill.editText?.text.toString(),
+                    note = dlgBinding.etNote.editText?.text.toString()
                 )
                 lifecycleScope.launch {
                     if (existing == null) dao.insert(entity) else dao.update(entity)

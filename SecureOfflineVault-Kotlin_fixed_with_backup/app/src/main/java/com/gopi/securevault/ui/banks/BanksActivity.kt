@@ -29,6 +29,10 @@ class BanksActivity : AppCompatActivity() {
         binding = ActivityBanksBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
         binding.recycler.layoutManager = LinearLayoutManager(this)
         binding.recycler.adapter = adapter
 
@@ -40,42 +44,35 @@ class BanksActivity : AppCompatActivity() {
     }
 
     private fun showCreateOrEditDialog(existing: BankEntity?) {
-        val dlgView = layoutInflater.inflate(com.gopi.securevault.R.layout.dialog_bank, null)
-        val etTitle = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etTitle)
-        val etAcc = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etAccountNo)
-        val etBank = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etBankName)
-        val etIFSC = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etIFSC)
-        val etCIF = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etCIF)
-        val etUser = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etUsername)
-        val etPrivy = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etPrivy)
+        val dlgBinding = com.gopi.securevault.databinding.DialogBankBinding.inflate(layoutInflater)
 
         existing?.let {
-            etTitle.setText(it.title ?: "")
-            etAcc.setText(it.accountNo)
-            etBank.setText(it.bankName ?: "")
-            etIFSC.setText(it.ifsc ?: "")
-            etCIF.setText(it.cifNo ?: "")
-            etUser.setText(it.username ?: "")
-            etPrivy.setText(it.privy ?: "")
+            dlgBinding.etTitle.editText?.setText(it.title ?: "")
+            dlgBinding.etAccountNo.editText?.setText(it.accountNo)
+            dlgBinding.etBankName.editText?.setText(it.bankName ?: "")
+            dlgBinding.etIFSC.editText?.setText(it.ifsc ?: "")
+            dlgBinding.etCIF.editText?.setText(it.cifNo ?: "")
+            dlgBinding.etUsername.editText?.setText(it.username ?: "")
+            dlgBinding.etPrivy.editText?.setText(it.privy ?: "")
         }
 
         AlertDialog.Builder(this)
             .setTitle(if (existing == null) "Create Bank" else "Edit Bank")
-            .setView(dlgView)
+            .setView(dlgBinding.root)
             .setPositiveButton("Save") { d, _ ->
-                val acc = etAcc.text.toString().trim()
+                val acc = dlgBinding.etAccountNo.editText?.text.toString().trim()
                 if (acc.isEmpty()) {
                     Toast.makeText(this, "Account No is mandatory", Toast.LENGTH_SHORT).show()
                 } else {
                     val entity = BankEntity(
                         id = existing?.id ?: 0,
-                        title = etTitle.text.toString(),
+                        title = dlgBinding.etTitle.editText?.text.toString(),
                         accountNo = acc,
-                        bankName = etBank.text.toString(),
-                        ifsc = etIFSC.text.toString(),
-                        cifNo = etCIF.text.toString(),
-                        username = etUser.text.toString(),
-                        privy = etPrivy.text.toString()
+                        bankName = dlgBinding.etBankName.editText?.text.toString(),
+                        ifsc = dlgBinding.etIFSC.editText?.text.toString(),
+                        cifNo = dlgBinding.etCIF.editText?.text.toString(),
+                        username = dlgBinding.etUsername.editText?.text.toString(),
+                        privy = dlgBinding.etPrivy.editText?.text.toString()
                     )
                     lifecycleScope.launch {
                         if (existing == null) dao.insert(entity) else dao.update(entity)

@@ -11,24 +11,29 @@ import com.gopi.securevault.R
 import net.sqlcipher.database.SQLiteDatabase
 import java.io.File
 
+import com.gopi.securevault.databinding.ActivitySettingsBinding
+
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val btnBackup = findViewById<Button>(R.id.btnBackup)
-        val btnRestore = findViewById<Button>(R.id.btnRestore)
-        val btnChangePassword = findViewById<Button>(R.id.btnChangePassword)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
 
-        btnBackup.setOnClickListener {
+        binding.btnBackup.setOnClickListener {
             showPasswordDialog { password ->
                 val backupFile = File(getExternalFilesDir(null), "securevault_backup.db")
                 backupDatabase(this, password, backupFile)
             }
         }
 
-        btnRestore.setOnClickListener {
+        binding.btnRestore.setOnClickListener {
             showPasswordDialog { password ->
                 val backupFile = File(getExternalFilesDir(null), "securevault_backup.db")
                 if (backupFile.exists()) {
@@ -39,7 +44,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        btnChangePassword.setOnClickListener {
+        binding.btnChangePassword.setOnClickListener {
             Toast.makeText(this, "Change password feature not yet implemented.", Toast.LENGTH_SHORT).show()
         }
     }

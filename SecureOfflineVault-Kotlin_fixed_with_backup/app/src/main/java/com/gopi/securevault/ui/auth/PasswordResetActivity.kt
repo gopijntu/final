@@ -19,6 +19,10 @@ class PasswordResetActivity : AppCompatActivity() {
         binding = ActivityPasswordResetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
         prefs = CryptoPrefs(this)
 
         // --- Safe check for security answers ---

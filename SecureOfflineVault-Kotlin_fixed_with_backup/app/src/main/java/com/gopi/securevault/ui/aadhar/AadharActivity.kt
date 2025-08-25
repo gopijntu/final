@@ -29,6 +29,10 @@ class AadharActivity : AppCompatActivity() {
         binding = ActivityAadharBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
         // Setup RecyclerView
         binding.recycler.layoutManager = LinearLayoutManager(this)
         binding.recycler.adapter = adapter
@@ -43,19 +47,45 @@ class AadharActivity : AppCompatActivity() {
     }
 
     private fun showCreateOrEditDialog(existing: AadharEntity?) {
-        val dlgView = layoutInflater.inflate(com.gopi.securevault.R.layout.dialog_aadhar, null)
-
-        val etName = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etName)
-        val etNumber = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etNumber)
-        val etDob = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etDob)
-        val etAddress = dlgView.findViewById<android.widget.EditText>(com.gopi.securevault.R.id.etAddress)
+        val dlgBinding = com.gopi.securevault.databinding.DialogAadharBinding.inflate(layoutInflater)
 
         existing?.let {
-            etName.setText(it.name ?: "")
-            etNumber.setText(it.number ?: "")
-            //etDob.setText(it.dob ?: "")
-            //etAddress.setText(it.address ?: "")
+            dlgBinding.etName.setText(it.name ?: "")
+            dlgBinding.etNumber.setText(it.number ?: "")
+            //dlgBinding.etDob.setText(it.dob ?: "")
+            //dlgBinding.etAddress.setText(it.address ?: "")
         }
+
+        val dlg = AlertDialog.Builder(this)
+            .setView(dlgBinding.root)
+            .setPositiveButton("Save", null)
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dlg.setOnShowListener {
+            val btn = dlg.getButton(AlertDialog.BUTTON_POSITIVE)
+            btn.setOnClickListener {
+                val number = dlgBinding.etNumber.text.toString().trim()
+                if (number.isBlank()) {
+                    Toast.makeText(this, "Aadhar number is mandatory", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                val entity = AadharEntity(
+                    id = existing?.id ?: 0,
+                    name = dlgBinding.etName.text.toString(),
+                    number = number,
+                    //dob = dlgBinding.etDob.text.toString(),
+                    //address = dlgBinding.etAddress.text.toString()
+                )
+                lifecycleScope.launch {
+                    if (existing == null) dao.insert(entity) else dao.update(entity)
+                }
+                dlg.dismiss()
+            }
+        }
+        dlg.show()
+    }
+}
 
         val dlg = AlertDialog.Builder(this)
             .setView(dlgView)
