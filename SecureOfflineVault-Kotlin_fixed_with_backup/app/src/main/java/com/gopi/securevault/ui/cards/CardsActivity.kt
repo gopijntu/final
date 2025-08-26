@@ -146,7 +146,7 @@ class CardVH(
         binding.tvCardHolder.text = item.cardType ?: ""
 
         // Buttons
-        binding.llCardNumber.setOnClickListener { onCopy(item.cardNumber ?: "") }
+        binding.ivCopyCard.setOnClickListener { onCopy(item.cardNumber ?: "") }
         binding.btnEdit.setOnClickListener { onEdit(item) }
         binding.btnDelete.setOnClickListener { onDelete(item) }
     }

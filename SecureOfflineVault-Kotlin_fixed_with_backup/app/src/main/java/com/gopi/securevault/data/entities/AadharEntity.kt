@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class AadharEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String?,
-    val number: String?
+    val number: String?,
+    val dob: String?,
+    val address: String?
 )

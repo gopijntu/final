@@ -56,8 +56,8 @@ class AadharActivity : AppCompatActivity() {
         existing?.let {
             dlgBinding.etName.setText(it.name ?: "")
             dlgBinding.etNumber.setText(it.number ?: "")
-            //dlgBinding.etDob.setText(it.dob ?: "")
-            //dlgBinding.etAddress.setText(it.address ?: "")
+            dlgBinding.etDob.setText(it.dob ?: "")
+            dlgBinding.etAddress.setText(it.address ?: "")
         }
 
         val dlg = AlertDialog.Builder(this)
@@ -78,8 +78,8 @@ class AadharActivity : AppCompatActivity() {
                     id = existing?.id ?: 0,
                     name = dlgBinding.etName.text.toString(),
                     number = number,
-                    //dob = dlgBinding.etDob.text.toString(),
-                    //address = dlgBinding.etAddress.text.toString()
+                    dob = dlgBinding.etDob.text.toString(),
+                    address = dlgBinding.etAddress.text.toString()
                 )
                 lifecycleScope.launch {
                     if (existing == null) dao.insert(entity) else dao.update(entity)
@@ -136,8 +136,8 @@ class AadharAdapter(
         fun bind(item: AadharEntity) {
             binding.tvTitle.text = item.name ?: "(No Name)"
             binding.tvAadharNumber.text = item.number ?: ""
-            //binding.tvDob.text = "DOB: ${item.dob ?: ""}"
-           // binding.tvAddress.text = "Address: ${item.address ?: ""}"
+            binding.tvDob.text = "DOB: ${item.dob ?: ""}"
+            binding.tvAddress.text = "Address: ${item.address ?: ""}"
 
             binding.llAadharNumber.setOnClickListener { onCopy(item.number ?: "") }
             binding.btnEdit.setOnClickListener { onEdit(item) }

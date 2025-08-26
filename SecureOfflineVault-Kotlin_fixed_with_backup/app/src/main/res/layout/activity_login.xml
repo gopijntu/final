@@ -53,5 +53,5 @@
         android:text="Designed &amp; Created by Gopinath Kumbha"
         android:textAppearance="?attr/textAppearanceCaption"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="24dp"/>
 </LinearLayout>

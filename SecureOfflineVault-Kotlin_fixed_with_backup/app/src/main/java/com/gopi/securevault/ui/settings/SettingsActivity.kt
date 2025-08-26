@@ -29,7 +29,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         binding.btnBackupRestore.setOnClickListener {
-            startActivity(Intent(this, BackupRestoreActivity::class.java))
+            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnChangePassword.setOnClickListener {
