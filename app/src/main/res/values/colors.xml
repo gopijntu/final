@@ -27,4 +27,6 @@
     <color name="inversePrimary">#A3C9FF</color>
     <color name="shadow">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="glow_cyan">#00FFFF</color>
+    <color name="transparent_neon">#0000FFFF</color>
 </resources>
